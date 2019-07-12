@@ -22,9 +22,14 @@
 
 
 import os
-import urllib
 import subprocess
 from gi.repository import Nautilus, GObject
+
+import sys
+if sys.version_info[0] < 3:
+    from urllib import unquote
+else:
+    from urllib.parse import unquote
 
 
 class GitgHere(GObject.GObject, Nautilus.MenuProvider):
@@ -48,7 +53,7 @@ class GitgHere(GObject.GObject, Nautilus.MenuProvider):
         if not directory.is_directory() or directory.get_uri_scheme() != 'file':
             return
 
-        directory_path = urllib.unquote(directory.get_uri()[7:])
+        directory_path = unquote(directory.get_uri()[7:])
         if not os.path.exists(os.path.join(directory_path, '.git')):
             return
 
